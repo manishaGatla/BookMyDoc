@@ -78,4 +78,52 @@
     color: white;
   }
   
-  
+  /* Reset default margin and padding */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* Style header */
+header {
+  background-color: #f0f0f0;
+  padding: 10px 0;
+  text-align: center;
+}
+
+/* Style navigation */
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  display: inline;
+ // margin-right: 10px;
+}
+
+nav ul li a {
+  display: inline-block;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.c-r{
+  background-color: #716d6e;
+}
+
+nav ul li a:hover {
+  background-color: #0056b3;
+}
+
+/* Style active link */
+.active {
+  background-color: #0056b3;
+}
+
+.margins{
+  margin: 20px;
+}
