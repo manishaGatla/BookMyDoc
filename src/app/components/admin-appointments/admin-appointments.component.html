@@ -1,0 +1,30 @@
+<div class="appointments-list">
+    <h2>Appointments List</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Patient Name</th>
+          <th>Patient Email</th>
+          <th>Patient Phone Number</th>
+          <th>Doctor Name</th>
+          <th>Doctor Email</th>
+          <th>Doctor Phone Number</th>
+          <th>Appointment Date</th>
+          <th>Appointment Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let appointment of appointments">
+          <td>{{ appointment.patient.name }}</td>
+          <td>{{ appointment.patient.email }}</td>
+          <td>{{ appointment.patient.phoneNumber }}</td>
+          <td>{{ appointment.doctor.name }}</td>
+          <td>{{ appointment.doctor.email }}</td>
+          <td>{{ appointment.doctor.phoneNumber }}</td>
+          <td>{{ appointment.date }}</td>
+          <td>{{ appointment.status }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

@@ -1,0 +1,87 @@
+<form>
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" class="form-control" [(ngModel)]="user.name">
+    </div>
+  
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" class="form-control" [(ngModel)]="user.email">
+    </div>
+  
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" class="form-control" [(ngModel)]="user.password">
+    </div>
+  
+    <div class="form-group">
+      <label for="confirmPassword">Confirm Password</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" [(ngModel)]="confirmPassword">
+    </div>
+  
+    <div class="form-group">
+      <label for="phoneNumber">Phone Number</label>
+      <input type="tel" id="phoneNumber" name="phoneNumber" class="form-control" [(ngModel)]="user.phoneNumber">
+    </div>
+  
+    <div class="form-group">
+      <label for="age">Age</label>
+      <input type="number" id="age" name="age" class="form-control" [(ngModel)]="user.age">
+    </div>
+  
+    <div class="form-group">
+      <label for="gender">Gender</label>
+      <select id="gender" name="gender" class="form-control" [(ngModel)]="user.gender">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+  
+    <div class="form-group">
+      <label for="role">Role</label>
+      <select id="role" name="role" class="form-control" [(ngModel)]="user.role">
+        <option value="patient">Patient</option>
+        <option value="doctor">Doctor</option>
+      </select>
+    </div>
+  
+    <div *ngIf="user.role === 'doctor'">
+      <div class="form-group">
+        <label for="specialization">Specialization</label>
+        <select id="specialization" name="specialization" class="form-control" [(ngModel)]="user.specialization">
+          <option value="cardiology">Cardiology</option>
+          <option value="dermatology">Dermatology</option>
+          <!-- Add other specializations -->
+        </select>
+      </div>
+  
+      <div class="form-group">
+        <label for="address">Address</label>
+        <textarea id="address" name="address" class="form-control" [(ngModel)]="user.address"></textarea>
+      </div>
+  
+      <div class="form-group">
+        <label for="bankName">Bank Name</label>
+        <input type="text" id="bankName" name="bankName" class="form-control" [(ngModel)]="user.bankName">
+      </div>
+  
+      <div class="form-group">
+        <label for="accountNumber">Account Number</label>
+        <input type="text" id="accountNumber" name="accountNumber" class="form-control" [(ngModel)]="user.accountNumber">
+      </div>
+  
+      <div class="form-group">
+        <label for="routingNumber">Routing Number</label>
+        <input type="text" id="routingNumber" name="routingNumber" class="form-control" [(ngModel)]="user.routingNumber">
+      </div>
+  
+      <div class="form-group">
+        <label for="accountHolderName">Account Holder Name</label>
+        <input type="text" id="accountHolderName" name="accountHolderName" class="form-control" [(ngModel)]="user.accountHolderName">
+      </div>
+    </div>
+  
+    <button type="submit" class="btn btn-primary">Register</button>
+  </form>
+  

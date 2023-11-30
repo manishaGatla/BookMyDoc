@@ -1,0 +1,37 @@
+<div class="doctors-list">
+    <h2>Doctors List</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone Number</th>
+          <th>Gender</th>
+          <th>Age</th>
+          <th>Specialization</th>
+          <th>Address</th>
+          <th>Hospital Name</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let doctor of doctors">
+          <td>{{ doctor.name }}</td>
+          <td>{{ doctor.email }}</td>
+          <td>{{ doctor.phoneNumber }}</td>
+          <td>{{ doctor.gender }}</td>
+          <td>{{ doctor.age }}</td>
+          <td>{{ doctor.specialization }}</td>
+          <td>{{ doctor.hospitalName }}</td>
+          <td>{{ doctor.status }}</td>
+          <td>{{ doctor.status }}</td>
+          <td>
+            <button (click)="approveDoctor(doctor)">Approve</button>
+            <button (click)="rejectDoctor(doctor)">Reject</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

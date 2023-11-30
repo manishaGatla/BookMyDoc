@@ -1,0 +1,40 @@
+<div class="container">
+    <h2>Book Appointment</h2>
+    <div>
+      <label for="hospitalSelect">Select Hospital:</label>
+      <select id="hospitalSelect" name="hospital" [(ngModel)]="selectedHospital" (change)="onHospitalChange()">
+        <option *ngFor="let hospital of hospitals" [value]="hospital.id">{{ hospital.name }}</option>
+      </select>
+      <p *ngIf="selectedHospital">Location: {{ selectedHospitalLocation }}</p>
+    </div>
+  
+    <div *ngIf="selectedHospital">
+      <label for="doctorSelect">Select Doctor:</label>
+      <select id="doctorSelect" name="doctor" [(ngModel)]="selectedDoctor">
+        <option *ngFor="let doctor of doctors" [value]="doctor.id">{{ doctor.name }}</option>
+      </select>
+    </div>
+  
+    <div *ngIf="selectedDoctor">
+      <label for="appointmentDate">Select Appointment Date:</label>
+      <input type="date" id="appointmentDate" name="appointmentDate" [(ngModel)]="selectedDate">
+      <label for="appointmentTime">Select Time Slot:</label>
+      <select id="appointmentTime" name="appointmentTime" [(ngModel)]="selectedTimeSlot">
+        <option *ngFor="let slot of timeSlots" [value]="slot.id">{{ slot.time }}</option>
+      </select>
+    </div>
+  
+    <div *ngIf="selectedTimeSlot">
+      <h3>Enter Payment Details</h3>
+      <form>
+        <div>
+          <label for="cardNumber">Card Number:</label>
+          <input type="text" id="cardNumber" name="cardNumber" [(ngModel)]="paymentDetails.cardNumber">
+        </div>
+       
+  
+        <button type="submit" (click)="submitAppointment()">Confirm Appointment</button>
+      </form>
+    </div>
+  </div>
+  
