@@ -1,8 +1,12 @@
-
+@import '~@fortawesome/fontawesome-free/css/all.css';
 .form-group {
     margin-bottom: 15px;
   }
-  
+  body{
+    background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbZaq_Aa_TrRxWHAOXDINU4v2X5v6UGrC-hmRcYWfPmPl1T8eO');
+    background-repeat: repeat;
+    background-size: cover;
+  }
   label {
     width: 20%; /* Set label width */
     display: inline-block; /* Display labels in block */
@@ -23,16 +27,44 @@
     margin-left: 350px;
 
   }
+
+  .mar{
+    margin-left: 15px !important;
+  }
   
+
+  td
+  input[type="date"]
+   {
+    width: 90%;
+    padding: 6px;
+  }
+
+  td
+  select {
+    width: 90%;
+    padding: 6px;
+  }
   
+
+
   input[type="text"],
   input[type="email"],
   input[type="password"],
   input[type="tel"],
   input[type="number"],
   input[type="date"],
+  input[type="time"],
 
   textarea,
+  select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 20%;
+  }
+
   select {
     width: 100%;
     padding: 8px;
@@ -45,6 +77,7 @@
   /* Add your custom styles here */
 .doctors-list,
 .patients-list,
+.appointments-list,
 .prescription-form,
 .container  {
     margin-top: 20px;
@@ -53,6 +86,7 @@
   table {
     width: 100%;
     border-collapse: collapse;
+    background-color: #f2f2f2;
   }
   
   th, td {
@@ -60,10 +94,7 @@
     padding: 8px;
     text-align: left;
   }
-  
-  th {
-    background-color: #f2f2f2;
-  }
+
   
   button {
     padding: 5px 10px;
@@ -73,9 +104,178 @@
     cursor: pointer;
   }
   
-  button:hover {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  
+
+  /* Reset default margin and padding */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/* Style header */
+header {
+  background-color: #f0f0f0;
+  padding: 10px 0;
+  text-align: center;
+}
+
+/* Style navigation */
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  display: inline;
+ // margin-right: 10px;
+}
+
+nav ul li a {
+  display: inline-block;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.c-r{
+  background-color: black;
+}
+
+nav ul li a:hover {
+  background-color: #0056b3;
+}
+
+/* Style active link */
+.active {
+  background-color: #0056b3;
+}
+
+.margins{
+  margin: 20px;
+}
+
+/* hospital.component.css */
+
+.container {
+  margin: 20px;
+}
+
+.hospital-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.hospital-table th, .hospital-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+
+.add-button {
+  margin-bottom: 10px;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+
+button {
+  padding: 6px 12px;
+  margin-right: 4px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+
+
+.add-form {
+  margin-top: 20px;
+  display: block;
+}
+
+.add-form h2 {
+  margin-bottom: 10px;
+}
+
+.add-form form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.add-form input {
+  margin-bottom: 10px;
+  padding: 8px;
+}
+
+.add-form button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+
+
+.hospital-table td {
+  position: relative;
+}
+
+.hospital-table  
+input {
+  width: 90%;
+  padding: 6px;
+}
+
+
+
+
+.specializations-table
+input {
+  width: 90%;
+  padding: 6px;
+}
+
+
+
+button {
+  padding: 6px 12px;
+  margin-right: 4px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+
+
+.error {
+  text-align: center; 
+  margin: 20px; 
+}
+
+.error span {
+  font-weight: bold; 
+  color: red; 
+}
+
+.password-toggle-icon {
+  font-family: "Font Awesome 5 Free";
+  cursor: pointer;
+  margin-left: -27px;
+}
+
+.t-r{
+  color:red;
+  font-weight:  bolder;
+}
+
+.mr-l-350{
+  margin-left: 350px !important;
+}

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BackendConnectionServiceService } from 'src/app/services/backend-connection-service.service';
 
 @Component({
   selector: 'app-admin-doctors-list-view',
@@ -7,18 +8,31 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminDoctorsListViewComponent implements OnInit {
 
-  constructor(){}
+  constructor(public service: BackendConnectionServiceService){}
   doctors : any =[];
 
   ngOnInit():void{
-
+    this.getDoctors();
   }
 
-  approveDoctor(doctor: any){
-
+  updateDoctor(doctor: any, status: any){
+    this.service.updateDoctor({_id:doctor._id, isApproved: status}).subscribe((res)=>{
+      this.getDoctors();
+    })
   }
 
-  rejectDoctor(doctor: any){
-    
+  getDoctors(){
+    this.service.getDoctors().subscribe((res)=>{
+      if(res){
+        this.service.doctors = res; 
+        this.service.doctors = this.service.doctors.filter((res: any)=> res.isApproved = 1);
+      }
+
+    })
   }
+
+  getStatus(isApproved : any){
+    return isApproved == 0 ? "Yet To Be Reviewed" : isApproved == 1 ? "Approved" :"Removed/Rejected";
+  }
+  
 }

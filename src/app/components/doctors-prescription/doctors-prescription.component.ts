@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { BackendConnectionServiceService } from 'src/app/services/backend-connection-service.service';
 
 @Component({
   selector: 'app-doctors-prescription',
@@ -6,26 +8,63 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./doctors-prescription.component.scss']
 })
 export class DoctorsPrescriptionComponent implements OnInit {
-  @Input() patient: any;
+
+  patient: any = null;
+  prescriptions: any =[];
   prescription: any ={
     medicineName: null,
     dosage: null,
     duration:null,
     timesPerDay : null,
-    nextVisitDate: null
+    appointment : null
   }
-  constructor(){}
+  constructor(public service: BackendConnectionServiceService, private router:Router){}
 
 
   ngOnInit():void{
-
+    this.prescription.appointment = this.service.appointmentToBePrescribed;
+    this.getPatientDetails();
   }
 
-  handleFileInput(event: any) {
+  getPatientDetails(){
+    this.service.getPatientDetails(this.service.appointmentToBePrescribed.patientEmail).subscribe((res)=>{
+      this.patient = res[0];
+    })
   }
+
+  removePrescription(pres: any, index: any){
+    this.prescriptions.splice(index,1);
+  }
+
 
   submitPrescription() {
-    
+    this.service.addPrescription(this.prescriptions).subscribe((res)=>{
+      var body ={
+        _id: this.service.appointmentToBePrescribed._id,
+        status:"Prescription Added"
+      }
+      this.service.updateAppointmentStatus(body).subscribe((res)=>
+      {
+        if(res){
+          this.router.navigateByUrl('/appointments');
+          this.service.appointmentToBePrescribed = null;
+        }
+      })
+   
+    })
   }
+
+  addClicked(){
+    this.prescriptions.push(this.prescription);
+    this.prescription ={
+      medicineName: null,
+      dosage: null,
+      duration:null,
+      timesPerDay : null
+    }
+    this.prescription.appointment = this.service.appointmentToBePrescribed;
+  }
+
+
 
 }

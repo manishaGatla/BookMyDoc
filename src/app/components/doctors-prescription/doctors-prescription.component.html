@@ -3,11 +3,12 @@
         <div class="col-md-6">
             <div class="patient-details">
                 <h2>Patient Details</h2>
-                <!-- Display patient details here -->
-                <p><strong>Name:</strong> {{ patient.name }}</p>
-                <p><strong>Email:</strong> {{ patient.email }}</p>
-                <p><strong>Age:</strong> {{ patient.age }}</p>
-                <!-- Add more patient details as needed -->
+                <p class="margins"><strong>Name:</strong> {{ patient.name }}</p>
+                <p class="margins"><strong>Email:</strong> {{ patient.email }}</p>
+                <p class="margins"><strong>Phone Number:</strong> {{ patient.phoneNumber }}</p>
+                <p class="margins"><strong>Age:</strong> {{ patient.age }}</p>
+                <p class="margins"><strong>Gender:</strong> {{ patient.gender }}</p>
+                <p class="margins"><strong>Address:</strong> {{ patient.address }}</p>
             </div>
         </div>
         <div class="col-md-6">
@@ -38,21 +39,39 @@
                             [(ngModel)]="prescription.timesPerDay">
                     </div>
 
-                    <div class="form-group">
-                        <label for="nextVisitDate">Next Visit Date</label>
-                        <input type="date" id="nextVisitDate" name="nextVisitDate" class="form-control"
-                            [(ngModel)]="prescription.nextVisitDate">
-                    </div>
 
-                    <div class="form-group">
-                        <label for="imageUpload">Upload Image</label>
-                        <input type="file" id="imageUpload" name="imageUpload" class="form-control"
-                            (change)="handleFileInput($event)">
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Add Prescription</button>
+                    <button type="submit" class="btn btn-primary" (click)="addClicked()">Add Another Prescription</button>
                 </form>
             </div>
+        </div>
+
+        <div class="margins" *ngIf="prescriptions && prescriptions.length > 0">
+        
+            <table class="prescriptions-table">
+                <thead>
+                    <tr>
+                        <th>Medicine Name</th>
+                        <th>Dosage</th>
+                        <th>Duration</th>
+                        <th>Times Per Day</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let prescription of prescriptions; let i = index">
+                        <td>{{ prescription.medicineName }}</td>
+                        <td>{{ prescription.dosage }}</td>
+                        <td>{{ prescription.duration }}</td>
+                        <td>{{ prescription.timesPerDay }}</td>
+                        <td> <button (click)="removePrescription(prescription,i)">Remove</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        
+        </div>
+
+        <div *ngIf="prescriptions && prescriptions.length > 0">
+            <button type="submit" class="btn btn-primary" (click)="submitPrescription()">Submit Prescription</button>
         </div>
     </div>
 </div>
