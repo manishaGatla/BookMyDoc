@@ -80,14 +80,19 @@
       </div>
       <div class="form-group">
         <label for="cardNumber">Card Number:</label>
-        <input type="text" id="cardNumber" name="cardNumber" [(ngModel)]="paymentDetails.cardNumber">
+        <input type="number" id="cardNumber" name="cardNumber" [(ngModel)]="paymentDetails.cardNumber">
+      </div>
+      <div  class="form-group mr-l-350">
+        <span  *ngIf="!cardNumberValidation()"  class="error-message t-r"> Entered Card Number is not valid</span> 
       </div>
 
       <div class="form-group">
         <label for="cardNumber">CVV:</label>
-        <input type="text" id="cardNumber" name="cardNumber" [(ngModel)]="paymentDetails.cvv">
+        <input type="number" id="cardNumber" name="cardNumber" (change)="validateCvv($event)" [(ngModel)]="paymentDetails.cvv">
       </div>
-
+      <div class="form-group mr-l-350">
+        <span  *ngIf="!isCvvValid"  class="error-message t-r"> Entered CVV is not valid</span> 
+      </div>
 
       <div class="form-group">
         <label for="cardNumber">Name On Card:</label>
@@ -99,10 +104,11 @@
         <label for="expireDate" class=" margins">Expiry Date(MM/YY)</label>
         <input type="text" id="expiryDate" class="mr-r-15  mr-l-15" name="expiryDate"
           [(ngModel)]="paymentDetails.expireDate" required>
-        <!-- <span  *ngIf="!isMonthValid || !isFutureDate" class="error-message"> Invalid Expiry Date</span> -->
+        
       </div>
-
-
+      <div class="form-group mr-l-350">
+        <span  *ngIf="!isMonthValid || !isFutureDate"  class="error-message t-r"> Invalid Expiry Date</span>
+      </div>
 
 
 
