@@ -1,40 +1,112 @@
 <div class="container">
-    <h2>Book Appointment</h2>
-    <div>
-      <label for="hospitalSelect">Select Hospital:</label>
-      <select id="hospitalSelect" name="hospital" [(ngModel)]="selectedHospital" (change)="onHospitalChange()">
-        <option *ngFor="let hospital of hospitals" [value]="hospital.id">{{ hospital.name }}</option>
-      </select>
-      <p *ngIf="selectedHospital">Location: {{ selectedHospitalLocation }}</p>
-    </div>
-  
-    <div *ngIf="selectedHospital">
-      <label for="doctorSelect">Select Doctor:</label>
-      <select id="doctorSelect" name="doctor" [(ngModel)]="selectedDoctor">
-        <option *ngFor="let doctor of doctors" [value]="doctor.id">{{ doctor.name }}</option>
-      </select>
-    </div>
-  
-    <div *ngIf="selectedDoctor">
-      <label for="appointmentDate">Select Appointment Date:</label>
-      <input type="date" id="appointmentDate" name="appointmentDate" [(ngModel)]="selectedDate">
+  <h2>Book Appointment</h2>
+  <div>
+    <label for="specializationSelect">Select Specialization:</label>
+    <select id="specializationSelect" name="specialization" [(ngModel)]="selectedSpecialization"
+      (change)="onSpecializationChange()">
+      <option *ngFor="let specialization of service.specializations" [value]="specialization._id">{{ specialization.name
+        }}</option>
+    </select>
+    <button class="mar" type="submit" (click)="clearConsultationFilter()">Clear Consultation Filter</button>
+  </div>
+ 
+
+
+  <div>
+    <label class="margins"for="doctorSelect">Select Doctor:</label>
+    <table>
+      <thead>
+        <tr>
+          <th>Doctor Name</th>
+          <th>Doctor Email</th>
+          <th>Doctor Phone Number</th>
+          <th>Specialization</th>
+          <th>Hospital</th>
+          <th>Hospital Address</th>
+          <th>Consultation Fee</th>
+          <th>Select</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let doctor of service.doctors">
+          <td>{{ doctor.name }}</td>
+          <td>{{ doctor.email }}</td>
+          <td>{{ doctor.phoneNumber }}</td>
+          <td>{{ doctor.specialization }}</td>
+          <td>{{ doctor.hospital }}</td>
+          <td>{{ getHospitalAddress(doctor) }}</td>
+          <td>{{ doctor.consultationFee }}</td>
+
+          <td>
+            <input type="radio" name="doctorRadio" [value]="doctor._id" [(ngModel)]="selectedDoctor">
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="selectedDoctor" class="margins">
+    <label for="appointmentDate">Select Appointment Date:</label>
+    <input type="date" id="appointmentDate" name="appointmentDate" [(ngModel)]="selectedDate"
+      (change)="onSelectedDateChange()">
+
+  </div>
+  <div *ngIf="selectedDate" class="margins">
+    <div *ngIf="slots && slots.length > 0">
       <label for="appointmentTime">Select Time Slot:</label>
-      <select id="appointmentTime" name="appointmentTime" [(ngModel)]="selectedTimeSlot">
-        <option *ngFor="let slot of timeSlots" [value]="slot.id">{{ slot.time }}</option>
-      </select>
+    <select id="appointmentTime" name="appointmentTime" [(ngModel)]="selectedTimeSlot" (change)="checkSlotAvaliability()">
+      <option *ngFor="let slot of slots" [value]="slot">{{ slot }}</option>
+    </select>
     </div>
-  
-    <div *ngIf="selectedTimeSlot">
-      <h3>Enter Payment Details</h3>
-      <form>
-        <div>
-          <label for="cardNumber">Card Number:</label>
-          <input type="text" id="cardNumber" name="cardNumber" [(ngModel)]="paymentDetails.cardNumber">
-        </div>
-       
-  
-        <button type="submit" (click)="submitAppointment()">Confirm Appointment</button>
-      </form>
+    <div *ngIf="!(slots && slots.length > 0)" class="margins error">
+      <span >No avaliable slots for the doctor selected on the selected date</span>
+
     </div>
   </div>
-  
+
+  <div *ngIf="!isSlotAvaliable" class="margins error">
+    <span >Slot is not avaliable for booking consultation/Another appointment was made for particular slot.Please select another slot.</span>
+
+  </div>
+
+  <div *ngIf="selectedTimeSlot && isSlotAvaliable">
+    <div>
+      <div class="form-group">
+        <label for="selectedPaymentMethod">Select Card Type:</label>
+      <select id="selectedPaymentMethod" name="selectedPaymentMethod" [(ngModel)]="paymentDetails.selectedPaymentMethod">
+        <option value="debit">Debit Card</option>
+            <option value="credit">Credit Card</option>
+      </select>
+      </div>
+      <div class="form-group">
+        <label for="cardNumber">Card Number:</label>
+        <input type="text" id="cardNumber" name="cardNumber" [(ngModel)]="paymentDetails.cardNumber">
+      </div>
+
+      <div class="form-group">
+        <label for="cardNumber">CVV:</label>
+        <input type="text" id="cardNumber" name="cardNumber" [(ngModel)]="paymentDetails.cvv">
+      </div>
+
+
+      <div class="form-group">
+        <label for="cardNumber">Name On Card:</label>
+        <input type="text" id="cardNumber" name="cardNumber" [(ngModel)]="paymentDetails.nameOnCard">
+      </div>
+
+
+      <div class="form-group">
+        <label for="expireDate" class=" margins">Expiry Date(MM/YY)</label>
+        <input type="text" id="expiryDate" class="mr-r-15  mr-l-15" name="expiryDate"
+          [(ngModel)]="paymentDetails.expireDate" required>
+        <!-- <span  *ngIf="!isMonthValid || !isFutureDate" class="error-message"> Invalid Expiry Date</span> -->
+      </div>
+
+
+
+
+
+      <button type="submit" (click)="submitAppointment(selectedDoctor)">Confirm Appointment</button>
+    </div>
+  </div>
+</div>

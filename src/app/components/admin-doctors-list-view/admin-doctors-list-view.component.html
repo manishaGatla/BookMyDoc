@@ -16,19 +16,20 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let doctor of doctors">
+        <tr *ngFor="let doctor of service.doctors">
           <td>{{ doctor.name }}</td>
           <td>{{ doctor.email }}</td>
           <td>{{ doctor.phoneNumber }}</td>
           <td>{{ doctor.gender }}</td>
           <td>{{ doctor.age }}</td>
           <td>{{ doctor.specialization }}</td>
-          <td>{{ doctor.hospitalName }}</td>
-          <td>{{ doctor.status }}</td>
-          <td>{{ doctor.status }}</td>
+          <td>{{ doctor.address }}</td>
+          <td>{{ doctor.hospital }}</td>
+          <td>{{getStatus(doctor.isApproved)}}</td>
           <td>
-            <button (click)="approveDoctor(doctor)">Approve</button>
-            <button (click)="rejectDoctor(doctor)">Reject</button>
+            <button class="mar" *ngIf="doctor.isApproved == 0" (click)="updateDoctor(doctor, 1)">Approve</button>
+            <button  class="mar" *ngIf="doctor.isApproved == 0" (click)="updateDoctor(doctor,2)">Reject</button>
+            <button  class="mar" *ngIf="doctor.isApproved == 1" (click)="updateDoctor(doctor,2)">Remove</button>
           </td>
         </tr>
       </tbody>

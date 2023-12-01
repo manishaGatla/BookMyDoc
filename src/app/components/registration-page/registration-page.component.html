@@ -8,20 +8,43 @@
       <label for="email">Email</label>
       <input type="email" id="email" name="email" class="form-control" [(ngModel)]="user.email">
     </div>
+
+    <div  class="form-group mr-l-350" *ngIf="!isValidEmail(user.email)">
+      <span  class="error-message t-r"> Email entered is not valid.</span> 
+    </div>
   
     <div class="form-group">
       <label for="password">Password</label>
-      <input type="password" id="password" name="password" class="form-control" [(ngModel)]="user.password">
+      <input type="{{ isPasswordVisible ? 'text' : 'password' }}" [(ngModel)]="user.password"
+      name="password" class="form-control" id="password">
+      <span class="password-toggle-icon" [class.fa-eye]="isPasswordVisible"
+      [class.fa-eye-slash]="!isPasswordVisible" (click)="togglePasswordVisibility()"></span>
     </div>
   
     <div class="form-group">
       <label for="confirmPassword">Confirm Password</label>
-      <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" [(ngModel)]="confirmPassword">
+      <input type="{{ isConfirmPasswordVisible ? 'text' : 'password' }}" [(ngModel)]="confirmPassword"
+      name="password" class="form-control" id="password">
+      <span class="password-toggle-icon" [class.fa-eye]="isConfirmPasswordVisible"
+      [class.fa-eye-slash]="!isConfirmPasswordVisible" (click)="toggleConfirmPasswordVisibility()"></span>
+
+      
     </div>
+
+
+      <div  class="form-group mr-l-350" *ngIf="user.password != confirmPassword">
+        <span  class="error-message t-r"> Passwords do not match</span> 
+      </div>
+
+    
   
     <div class="form-group">
       <label for="phoneNumber">Phone Number</label>
-      <input type="tel" id="phoneNumber" name="phoneNumber" class="form-control" [(ngModel)]="user.phoneNumber">
+      <input type="tel" id="phoneNumber" name="phoneNumber" (change)="validatePhoneNumber($event)" class="form-control" [(ngModel)]="user.phoneNumber">
+    </div>
+
+    <div  class="form-group mr-l-350" *ngIf="!isPhoneNumberValid">
+      <span  class="error-message t-r"> Phone Number entered is not valid</span> 
     </div>
   
     <div class="form-group">
@@ -45,20 +68,28 @@
         <option value="doctor">Doctor</option>
       </select>
     </div>
+
+    <div class="form-group">
+      <label for="address">Address</label>
+      <textarea id="address" name="address" class="form-control" [(ngModel)]="user.address"></textarea>
+    </div>
   
     <div *ngIf="user.role === 'doctor'">
+      <div class="form-group"> <label for="hospitalSelect">Select Hospital:</label>
+      <select id="hospitalSelect" name="hospital" [(ngModel)]="user.selectedHospital" >
+        <option *ngFor="let hospital of service.hospitals" [value]="hospital._id">{{ hospital.name }}</option>
+      </select>
+      </div>
       <div class="form-group">
         <label for="specialization">Specialization</label>
         <select id="specialization" name="specialization" class="form-control" [(ngModel)]="user.specialization">
-          <option value="cardiology">Cardiology</option>
-          <option value="dermatology">Dermatology</option>
-          <!-- Add other specializations -->
+          <option *ngFor="let specialization of service.specializations" [value]="specialization._id">{{ specialization.name }}</option>
         </select>
       </div>
-  
+
       <div class="form-group">
-        <label for="address">Address</label>
-        <textarea id="address" name="address" class="form-control" [(ngModel)]="user.address"></textarea>
+        <label for="consultationFee">Consultation Fee</label>
+        <input type="text" id="consultationFee" name="consultationFee" class="form-control" [(ngModel)]="user.consultationFee">
       </div>
   
       <div class="form-group">
@@ -82,6 +113,6 @@
       </div>
     </div>
   
-    <button type="submit" class="btn btn-primary">Register</button>
+    <button type="submit" class="btn btn-primary" (click)="registerUser()">Register</button>
   </form>
   

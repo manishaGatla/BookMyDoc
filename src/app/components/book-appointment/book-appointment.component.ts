@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { BackendConnectionServiceService } from 'src/app/services/backend-connection-service.service';
 
 @Component({
   selector: 'app-book-appointment',
@@ -7,28 +9,142 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BookAppointmentComponent implements OnInit {
 
-  constructor(){}
+  constructor(public service: BackendConnectionServiceService, private router : Router){}
   hospitals: any =[];
   doctors: any =[];
   timeSlots: any =[];
   selectedDate: any;
-  selectedTimeSlot: boolean = false;
+  selectedTimeSlot: any;
   selectedDoctor: any ;
-  selectedHospital: any;
+  selectedSpecialization: any;
   selectedHospitalLocation: any;
+  slots: any =[];
+  schedules: any =[];
+  selectedPaymentMethod: any;
   paymentDetails : any ={
-    cardNumber: null
-  }
+    cardNumber: null,
+    selectedPaymentMethod: null,
+    cvv: null,
+    nameOnCard: null,
+    expireDate: null,
+    appointmentId: null,
+    amount: null
+  };
+  isSlotAvaliable: boolean = true;
+  appointmentsOfDoc: any =[];
   ngOnInit():void{
-
+    this.getDoctors();
   }
 
 
-  submitAppointment(){
+  submitAppointment(doctor: any){
+    var doctorData  = this.service.doctors.filter((doc: any)=> doc._id == this.selectedDoctor)[0];
+    var body={
+      doctorId:  doctorData._id,
+      doctorName:doctorData.name,
+      patientName: this.service.user.name,
+      patientId:this.service.user._id,
+      patientNumber: this.service.user.phoneNumber,
+      doctorNumber:doctorData.phoneNumber,
+      appointmentDate: this.selectedDate,
+      timeSlot: this.selectedTimeSlot,
+      doctorEmail:doctorData.email,
+      patientEmail: this.service.user.email,
+      status: "Consultation Requested"
+    }
+    this.service.addAppointment(body).subscribe((res)=>{
+      if(res && res.insertedId){
+        var appointmentId = res.insertedId;
+        this.paymentDetails["appointmentId"]= appointmentId;
+        this.paymentDetails["amount"] = doctor.consultationFee;
+        this.service.addPayment(this.paymentDetails).subscribe((res)=>{
+          this.reset();
+          this.router.navigateByUrl('/appointments');
+        })
+      }
+    })
+  }
+
+  reset(){
+    this.paymentDetails = {
+      cardNumber: null,
+      selectedPaymentMethod: null,
+      cvv: null,
+      nameOnCard: null,
+      expireDate: null,
+      appointmentId: null,
+      amount: null
+    };
+    this.selectedDate = null;
+    this.selectedDoctor = null;
+    this.selectedSpecialization = null;
+    this.selectedTimeSlot = null;
 
   }
 
-  onHospitalChange(){
+  getDoctors(){
+    this.service.getDoctors().subscribe((res)=>{
+      if(res){
+        this.service.doctors = res; 
+        this.service.doctors = this.service.doctors.filter((res: any)=> res.isApproved = 1);
+      }
+
+    })
+  }
+
+  getHospitalAddress(doctor: any){
+    return this.service.hospitals.find((hos: any)=> hos._id ==  doctor.hospitalId).address;
+  }
+
+ 
+
+  onSpecializationChange(){
+    var specialization = this.service.specializations.find((c: any)=> c._id == this.selectedSpecialization).name;
+    this.service.getDoctorsBySpecialization(specialization).subscribe((res)=>{
+      this.service.doctors = res;
+      this.service.doctors = this.service.doctors.filter((res: any)=> res.isApproved = 1);
+    })
+  }
+
+  onSelectedDateChange(){
+    this.service.getschedulesByDate(this.selectedDate, this.selectedDoctor).subscribe((res)=>{
+      this.service.getAppointmentDetails(this.service.user._id,this.selectedDoctor).subscribe((app: any)=>{
+        this.appointmentsOfDoc = app;
+        this.schedules = res;
+        this.generateSlots();
+      })
+     
+    })
+  }
+
+  checkSlotAvaliability(){
+    if(this.selectedTimeSlot){
+      const index = this.appointmentsOfDoc.findIndex((appointment: any)=> appointment.timeSlot == this.selectedTimeSlot && appointment.appointmentDate == this.selectedDate);
+      this.isSlotAvaliable =  index != -1 ? false : true;
+    }
+    else{
+
+      this.isSlotAvaliable =   true;
+    }
+  }
+
+  clearConsultationFilter(){
+    this.selectedSpecialization = null;
+    this.getDoctors();
+  }
+
+  generateSlots(): void {
+    this.schedules.forEach((schedule: any)=>{
+      const startTime = new Date(`${schedule.date} ${schedule.startTime}`);
+      const endTime = new Date(`${schedule.date} ${schedule.endTime}`);
+
+      let currentTime = startTime;
+  
+      while (currentTime < endTime) {
+        this.slots.push(currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+        currentTime.setMinutes(currentTime.getMinutes() + 30);
+      }
+    })
     
   }
 }
