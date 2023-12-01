@@ -30,12 +30,58 @@ export class BookAppointmentComponent implements OnInit {
     appointmentId: null,
     amount: null
   };
+  isDateValid: boolean = true;
+  isFutureDate: boolean = true;
+  isMonthValid: boolean = true;
+  isCvvValid: boolean = true;
+  isCardNumberValid: boolean = true;
   isSlotAvaliable: boolean = true;
   appointmentsOfDoc: any =[];
   ngOnInit():void{
     this.getDoctors();
   }
+  cardNumberValidation(): boolean {
+    return this.paymentDetails.cardNumber != null && this.paymentDetails.cardNumber != ""? /^\d{16}$/.test(this.paymentDetails.cardNumber) : true; 
+  }
 
+  securityCodeValidation(): boolean {
+    return this.paymentDetails.cvv != null && this.paymentDetails.cvv != ""? /^\d{3}$/.test(this.paymentDetails.cvv) : true; 
+  }
+
+  validateCvv(event: Event) {
+    const inputValue = (event.target as HTMLInputElement).value;
+    const cvvPattern = /^[0-9]{3,4}$/;
+    this.isCvvValid = cvvPattern.test(inputValue);
+}
+
+validateExpiryDate(event: Event) {
+  if((event.target as HTMLInputElement).value != null){
+    const inputValue = (event.target as HTMLInputElement).value;
+    const datePattern = /^\d{2}\/\d{2}$/;
+    this.isDateValid = datePattern.test(inputValue);
+
+    if (this.isDateValid) {
+        const currentDate = new Date();
+        const inputDateParts = inputValue.split('/');
+        const inputMonth = Number(inputDateParts[0]);
+        const inputYear = Number(inputDateParts[1]);
+        const inputDate = new Date(2000 + inputYear, inputMonth - 1, 1);
+
+        this.isMonthValid = inputMonth >= 1 && inputMonth <= 12;
+        this.isFutureDate = inputDate > currentDate;
+    }
+  }
+  else{
+    this.isMonthValid = true;
+    this.isFutureDate  = true;
+  }
+}
+
+validateCardNumber(event: Event) {
+    const inputValue = (event.target as HTMLInputElement).value;
+    const cardNumberPattern = /^[0-9]{16}$/;
+    this.isCardNumberValid = cardNumberPattern.test(inputValue);
+}
 
   submitAppointment(doctor: any){
     var doctorData  = this.service.doctors.filter((doc: any)=> doc._id == this.selectedDoctor)[0];
@@ -55,6 +101,8 @@ export class BookAppointmentComponent implements OnInit {
     this.service.addAppointment(body).subscribe((res)=>{
       if(res && res.insertedId){
         var appointmentId = res.insertedId;
+        this.paymentDetails.cvv= this.paymentDetails.cvv.toString();
+        this.paymentDetails.cardNumber = this.paymentDetails.cardNumber.toString();
         this.paymentDetails["appointmentId"]= appointmentId;
         this.paymentDetails["amount"] = doctor.consultationFee;
         this.service.addPayment(this.paymentDetails).subscribe((res)=>{
@@ -107,6 +155,19 @@ export class BookAppointmentComponent implements OnInit {
   }
 
   onSelectedDateChange(){
+    this.appointmentsOfDoc =[];
+    this.schedules = [];
+    this.slots =[];
+    this.paymentDetails = {
+      cardNumber: null,
+      selectedPaymentMethod: null,
+      cvv: null,
+      nameOnCard: null,
+      expireDate: null,
+      appointmentId: null,
+      amount: null
+    };
+    this.selectedTimeSlot = null;
     this.service.getschedulesByDate(this.selectedDate, this.selectedDoctor).subscribe((res)=>{
       this.service.getAppointmentDetails(this.service.user._id,this.selectedDoctor).subscribe((app: any)=>{
         this.appointmentsOfDoc = app;
@@ -119,7 +180,9 @@ export class BookAppointmentComponent implements OnInit {
 
   checkSlotAvaliability(){
     if(this.selectedTimeSlot){
-      const index = this.appointmentsOfDoc.findIndex((appointment: any)=> appointment.timeSlot == this.selectedTimeSlot && appointment.appointmentDate == this.selectedDate);
+      const index = this.appointmentsOfDoc.findIndex((appointment: any)=>
+       appointment.timeSlot == this.selectedTimeSlot && appointment.appointmentDate == this.selectedDate && appointment.status != "Rejected"
+       );
       this.isSlotAvaliable =  index != -1 ? false : true;
     }
     else{

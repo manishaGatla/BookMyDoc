@@ -28,17 +28,21 @@
          
           <td *ngIf="appointment.isRescheduleClicked"><input type="date"  [(ngModel)]="selectedDate" (change)="onSelectedDateChange(appointment)" ></td>
           <td *ngIf="appointment.isRescheduleClicked">
-            <select id="appointmentTime" name="appointmentTime" [(ngModel)]="selectedTimeslot">
+            <select id="appointmentTime" name="appointmentTime" [(ngModel)]="selectedTimeslot" (change)="checkSlotAvaliability(appointment)">
               <option *ngFor="let slot of slots" [value]="slot">{{ slot }}</option>
             </select>
+            <div *ngIf="!isSlotAvaliable" class="margins error">
+              <span >Slot is not avaliable for booking consultation/Another appointment was made for particular slot.Please select another slot.</span>
+          
+            </div>
           </td>
           <td>{{appointment.status}}</td>
           <td>
             <button class="mar" *ngIf="appointment.status == 'Prescription Added'" (click)="viewPrescription(appointment)" >View Prescription</button>
 
-            <button class="mar" *ngIf="appointment.isRescheduleClicked" (click)="submitReschedule(appointment)" >Submit</button>
+            <button class="mar" *ngIf="appointment.isRescheduleClicked " [disabled]="!isSlotAvaliable"  (click)="submitReschedule(appointment)" >Submit Reschedule</button>
             <button class="mar" *ngIf="service.isPatient && appointment.status == 'Consultation Requested'" (click)="updateAppointment(appointment, 'Cancel')">Cancel</button>
-            <button class="mar" *ngIf="service.isPatient && appointment.status !== 'Rejected' && appointment.status == 'Completed' && appointment.status !== 'Prescription Added' && !appointment.isRescheduleClicked" (click)="RescheduleClicked(appointment)" >Reschedule</button>
+            <button class="mar" *ngIf="service.isPatient && appointment.status !== 'Rejected' && appointment.status !== 'Completed' && appointment.status !== 'Prescription Added' && !appointment.isRescheduleClicked" (click)="RescheduleClicked(appointment)" >Reschedule</button>
             <button class="mar" *ngIf="appointment.isRescheduleClicked" (click)="cancelReschedule(appointment)" >Cancel Reschedule</button>
 
             <button class="mar" *ngIf="service.isDoctor && (appointment.status == 'Consultation Requested' || appointment.status == 'Rescheduled')" (click)="updateAppointment(appointment, 'Approved')">Approve</button>    

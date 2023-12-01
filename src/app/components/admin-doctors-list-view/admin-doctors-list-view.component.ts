@@ -25,7 +25,7 @@ export class AdminDoctorsListViewComponent implements OnInit {
     this.service.getDoctors().subscribe((res)=>{
       if(res){
         this.service.doctors = res; 
-        this.service.doctors = this.service.doctors.filter((res: any)=> res.isApproved = 1);
+        this.service.doctors = !this.service.isAdmin ? this.service.doctors.filter((res: any)=> res.isApproved == 1) : this.service.doctors;
       }
 
     })

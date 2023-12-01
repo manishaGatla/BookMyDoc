@@ -40,7 +40,7 @@
   
     <div class="form-group">
       <label for="phoneNumber">Phone Number</label>
-      <input type="tel" id="phoneNumber" name="phoneNumber" (change)="validatePhoneNumber($event)" class="form-control" [(ngModel)]="user.phoneNumber">
+      <input type="number" id="phoneNumber" name="phoneNumber" (change)="validatePhoneNumber($event)" class="form-control" [(ngModel)]="user.phoneNumber">
     </div>
 
     <div  class="form-group mr-l-350" *ngIf="!isPhoneNumberValid">
@@ -88,7 +88,7 @@
       </div>
 
       <div class="form-group">
-        <label for="consultationFee">Consultation Fee</label>
+        <label for="consultationFee">Consultation Fee($)</label>
         <input type="text" id="consultationFee" name="consultationFee" class="form-control" [(ngModel)]="user.consultationFee">
       </div>
   
@@ -99,12 +99,19 @@
   
       <div class="form-group">
         <label for="accountNumber">Account Number</label>
-        <input type="text" id="accountNumber" name="accountNumber" class="form-control" [(ngModel)]="user.accountNumber">
+        <input type="number" id="accountNumber" name="accountNumber" class="form-control" [(ngModel)]="user.accountNumber">
+      </div>
+
+      <div  class="form-group mr-l-350" *ngIf="!AccountNumberValidation(user.accountNumber)">
+        <span  class="error-message t-r"  > Account Number entered is not valid</span> 
       </div>
   
       <div class="form-group">
         <label for="routingNumber">Routing Number</label>
-        <input type="text" id="routingNumber" name="routingNumber" class="form-control" [(ngModel)]="user.routingNumber">
+        <input type="number" id="routingNumber" name="routingNumber" class="form-control" [(ngModel)]="user.routingNumber">
+      </div>
+      <div  class="form-group mr-l-350" *ngIf="!RoutingNumberValidation(user.routingNumber)">
+        <span  class="error-message t-r"> Routing Number entered is not valid</span> 
       </div>
   
       <div class="form-group">

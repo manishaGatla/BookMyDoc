@@ -78,18 +78,19 @@ isValidEmail(email: string): boolean {
         name : this.user.name,
         email : this.user.email,
         password: this.user.password,
-        phoneNumber: this.user.phoneNumber,
+        phoneNumber: this.user.phoneNumber.toString(),
         age: this.user.age,
         gender: this.user.gender,
         address: this.user.address,
         specialization: this.service.specializations.find((hospital: any)=> hospital._id == this.user.specialization ).name,
         bankName: this.user.bankName,
-        accountNumber : this.user.accountNumber,
-        routingNumber: this.user.routingNumber,
+        accountNumber : this.user.accountNumber.toString(),
+        routingNumber: this.user.routingNumber.toString(),
         accountHolderName: this.user.accountHolderName,
         hospital: this.service.hospitals.find((hospital: any)=> hospital._id == this.user.selectedHospital ).name,
         hospitalId: this.user.selectedHospital,
-        isApproved:0
+        isApproved:0,
+        consultationFee: this.user.consultationFee
       }
     }
     else{
@@ -97,7 +98,7 @@ isValidEmail(email: string): boolean {
         name : this.user.name,
         email : this.user.email,
         password: this.user.password,
-        phoneNumber: this.user.phoneNumber,
+        phoneNumber: this.user.phoneNumber.toString(),
         age: this.user.age,
         gender: this.user.gender,
         address: this.user.address,
@@ -112,5 +113,14 @@ isValidEmail(email: string): boolean {
 
   toggleConfirmPasswordVisibility(){
     this.isConfirmPasswordVisible = !this.isConfirmPasswordVisible;
+  }
+
+  AccountNumberValidation(accountNumber: string): boolean {
+    return accountNumber != null && accountNumber != ""? /^\d{12}$/.test(accountNumber) : true; 
+  }
+  
+  RoutingNumberValidation(routingNumber: string): boolean {
+    
+    return routingNumber != null && routingNumber != ""? /^\d{9}$/.test(routingNumber) : true ; 
   }
 }
