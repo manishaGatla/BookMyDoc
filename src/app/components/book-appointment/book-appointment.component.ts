@@ -155,6 +155,19 @@ validateCardNumber(event: Event) {
   }
 
   onSelectedDateChange(){
+    this.appointmentsOfDoc =[];
+    this.schedules = [];
+    this.slots =[];
+    this.paymentDetails = {
+      cardNumber: null,
+      selectedPaymentMethod: null,
+      cvv: null,
+      nameOnCard: null,
+      expireDate: null,
+      appointmentId: null,
+      amount: null
+    };
+    this.selectedTimeSlot = null;
     this.service.getschedulesByDate(this.selectedDate, this.selectedDoctor).subscribe((res)=>{
       this.service.getAppointmentDetails(this.service.user._id,this.selectedDoctor).subscribe((app: any)=>{
         this.appointmentsOfDoc = app;
@@ -167,7 +180,9 @@ validateCardNumber(event: Event) {
 
   checkSlotAvaliability(){
     if(this.selectedTimeSlot){
-      const index = this.appointmentsOfDoc.findIndex((appointment: any)=> appointment.timeSlot == this.selectedTimeSlot && appointment.appointmentDate == this.selectedDate);
+      const index = this.appointmentsOfDoc.findIndex((appointment: any)=>
+       appointment.timeSlot == this.selectedTimeSlot && appointment.appointmentDate == this.selectedDate && appointment.status != "Rejected"
+       );
       this.isSlotAvaliable =  index != -1 ? false : true;
     }
     else{

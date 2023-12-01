@@ -89,7 +89,8 @@ isValidEmail(email: string): boolean {
         accountHolderName: this.user.accountHolderName,
         hospital: this.service.hospitals.find((hospital: any)=> hospital._id == this.user.selectedHospital ).name,
         hospitalId: this.user.selectedHospital,
-        isApproved:0
+        isApproved:0,
+        consultationFee: this.user.consultationFee
       }
     }
     else{

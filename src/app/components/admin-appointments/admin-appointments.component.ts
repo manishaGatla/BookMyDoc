@@ -19,6 +19,8 @@ export class AdminAppointmentsComponent implements OnInit {
   prescriptionViewed : boolean = false;
   appointmentToViewPresc:any = null;
   prescriptions: any =[];
+  isSlotAvaliable: boolean = true;
+  appointmentsOfDoc:any =[];
 
   ngOnInit():void{
     this.getAppointments();
@@ -44,9 +46,24 @@ export class AdminAppointmentsComponent implements OnInit {
     })
   }
 
+
+  checkSlotAvaliability(appointmentEdit: any){
+    if(this.selectedTimeslot){
+      const index = this.appointmentsOfDoc.findIndex((appointment: any)=>
+       appointment.timeSlot == this.selectedTimeslot && appointment.appointmentDate == this.selectedDate 
+       && appointment.status != "Rejected" && appointment._id != appointmentEdit._id
+       );
+      this.isSlotAvaliable =  index != -1 ? false : true;
+    }
+    else{
+
+      this.isSlotAvaliable =   true;
+    }
+  }
+
   RescheduleClicked(appointment: any){
     appointment.isRescheduleClicked = true;
-    this.selectedDate = new Date(appointment.selectedDate);
+    this.selectedDate = appointment.selectedDate;
     this.selectedTimeslot = appointment.selectedTimeslot;
   }
 
@@ -59,9 +76,16 @@ export class AdminAppointmentsComponent implements OnInit {
   }
 
   onSelectedDateChange(appointment: any){
+    this.appointmentsOfDoc =[];
+    this.schedules = [];
+    this.slots =[];
+
     this.service.getschedulesByDate(this.selectedDate, appointment.doctorId).subscribe((res)=>{
-      this.schedules = res;
-      this.generateSlots();
+      this.service.getAppointmentDetails(this.service.user._id,appointment.doctorId).subscribe((app: any)=>{
+        this.appointmentsOfDoc = app;
+        this.schedules = res;
+        this.generateSlots();
+      })
     })
   }
 
