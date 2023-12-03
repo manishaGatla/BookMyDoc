@@ -34,5 +34,19 @@ export class AdminDoctorsListViewComponent implements OnInit {
   getStatus(isApproved : any){
     return isApproved == 0 ? "Yet To Be Reviewed" : isApproved == 1 ? "Approved" :"Removed/Rejected";
   }
+
+  calculateAge(dob: any){
+    const today = new Date();
+    const birthDate = new Date(dob);
+
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    return age;
+  }
   
 }

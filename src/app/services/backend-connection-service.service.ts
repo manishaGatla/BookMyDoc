@@ -11,14 +11,19 @@ export class BackendConnectionServiceService {
     email : null,
     password: null,
     phoneNumber: null,
-    age: null,
+    dob: null,
     gender: null,
+    role: null,
     specialization: null,
     address: null,
     bankName: null,
     accountNumber : null,
     routingNumber: null,
-    accountHolderName: null
+    accountHolderName: null,
+    selectedHospital: null,
+    heightFeets: null,
+    heightInches: null,
+    healthDetails: null
   };
   isLoginSuccessful:boolean = false;
   isAdmin: boolean = false;
@@ -104,8 +109,8 @@ export class BackendConnectionServiceService {
     return this.httpclient.get(this.baseNodeUrl +'api/get/doctorsBySpecialization?name='+ name);
   }
 
-  getschedulesByDate(date : any, id: any){
-    return this.httpclient.get(this.baseNodeUrl +'api/get/schedulesByDate?doctorId='+ id + "&date=" +date);
+  getschedulesByDate(day : any, id: any){
+    return this.httpclient.get(this.baseNodeUrl +'api/get/schedulesByDate?doctorId='+ id + "&day=" +day);
   }
 
   addAppointment(reqBody: any): Observable<any>{
@@ -140,8 +145,11 @@ export class BackendConnectionServiceService {
     return this.httpclient.get(this.baseNodeUrl +'api/get/prescription?id='+ id);
   }
 
-
   getAppointmentDetails(patientId: any, doctorId: any): Observable<any>{
     return this.httpclient.get(this.baseNodeUrl +'api/get/appointmentsForSlotCheck?patientId='+ patientId + "&doctorId=" +doctorId);
+  }
+
+  udpatePaymentDetailsInappointments(id: any): Observable<any>{
+    return this.httpclient.post(this.baseNodeUrl +'api/update/appointmentPaymentStatus?id=' + id,null);
   }
 }

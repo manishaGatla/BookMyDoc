@@ -6,9 +6,15 @@
                 <p class="margins"><strong>Name:</strong> {{ patient.name }}</p>
                 <p class="margins"><strong>Email:</strong> {{ patient.email }}</p>
                 <p class="margins"><strong>Phone Number:</strong> {{ patient.phoneNumber }}</p>
-                <p class="margins"><strong>Age:</strong> {{ patient.age }}</p>
+                <p class="margins"><strong>Age:</strong> {{ calculateAge(patient.dob) }}</p>
                 <p class="margins"><strong>Gender:</strong> {{ patient.gender }}</p>
                 <p class="margins"><strong>Address:</strong> {{ patient.address }}</p>
+                <div class="form-group">
+                    <label for="amount">Amount Needs to be paid (In $):</label>
+                    <input type="text" id="amount" name="amount" class="form-control"
+                        [(ngModel)]="amount">
+                </div>
+                
             </div>
         </div>
         <div class="col-md-6">
@@ -46,7 +52,7 @@
         </div>
 
         <div class="margins" *ngIf="prescriptions && prescriptions.length > 0">
-        
+            
             <table class="prescriptions-table">
                 <thead>
                     <tr>

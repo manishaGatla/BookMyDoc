@@ -21,7 +21,7 @@
           <td>{{ doctor.email }}</td>
           <td>{{ doctor.phoneNumber }}</td>
           <td>{{ doctor.gender }}</td>
-          <td>{{ doctor.age }}</td>
+          <td>{{ calculateAge(doctor.dob) }}</td>
           <td>{{ doctor.specialization }}</td>
           <td>{{ doctor.address }}</td>
           <td>{{ doctor.hospital }}</td>
@@ -29,7 +29,9 @@
           <td>
             <button class="mar" *ngIf="doctor.isApproved == 0" (click)="updateDoctor(doctor, 1)">Approve</button>
             <button  class="mar" *ngIf="doctor.isApproved == 0" (click)="updateDoctor(doctor,2)">Reject</button>
-            <button  class="mar" *ngIf="doctor.isApproved == 1" (click)="updateDoctor(doctor,2)">Remove</button>
+
+            <button  class="mar" *ngIf="doctor.isApproved == 1" (click)="updateDoctor(doctor,2)">Mark As Inactive</button>
+            <button  class="mar" *ngIf="doctor.isApproved == 2" (click)="updateDoctor(doctor,1)">Mark As Active</button>
           </td>
         </tr>
       </tbody>

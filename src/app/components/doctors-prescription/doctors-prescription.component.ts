@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AppModule } from 'src/app/app.module';
 import { BackendConnectionServiceService } from 'src/app/services/backend-connection-service.service';
 
 @Component({
@@ -18,6 +19,7 @@ export class DoctorsPrescriptionComponent implements OnInit {
     timesPerDay : null,
     appointment : null
   }
+  amount: any = null;
   constructor(public service: BackendConnectionServiceService, private router:Router){}
 
 
@@ -41,7 +43,8 @@ export class DoctorsPrescriptionComponent implements OnInit {
     this.service.addPrescription(this.prescriptions).subscribe((res)=>{
       var body ={
         _id: this.service.appointmentToBePrescribed._id,
-        status:"Prescription Added"
+        status:"Prescription Added",
+        amountInDollars: this.amount
       }
       this.service.updateAppointmentStatus(body).subscribe((res)=>
       {
@@ -63,6 +66,20 @@ export class DoctorsPrescriptionComponent implements OnInit {
       timesPerDay : null
     }
     this.prescription.appointment = this.service.appointmentToBePrescribed;
+  }
+
+  calculateAge(dob: any){
+    const today = new Date();
+    const birthDate = new Date(dob);
+
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    return age;
   }
 
 

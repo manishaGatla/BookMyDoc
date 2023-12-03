@@ -48,8 +48,8 @@
     </div>
   
     <div class="form-group">
-      <label for="age">Age</label>
-      <input type="number" id="age" name="age" class="form-control" [(ngModel)]="user.age">
+      <label for="dob">Date of Birth</label>
+      <input type="date" id="dob" name="dob" class="form-control" [(ngModel)]="user.dob">
     </div>
   
     <div class="form-group">
@@ -73,6 +73,20 @@
       <label for="address">Address</label>
       <textarea id="address" name="address" class="form-control" [(ngModel)]="user.address"></textarea>
     </div>
+
+    <div *ngIf="user.role === 'patient'">
+      <div class="form-group"> <label for="weight">weight (In pounds):</label>
+        <input type="number" id="weight" name="weight" class="form-control" [(ngModel)]="user.weight">
+      </div>
+      <div class="form-group"> <label for="hospitalSelect">height:</label>
+        <input type="number" id="heightFeets" name="heightFeets" class="form-control" placeholder="Height in Feets" [(ngModel)]="user.heightFeets">
+        <input type="number" id="heightInches" name="heightInches" class="form-control" placeholder="Height in Inches"  [(ngModel)]="user.heightInches">
+      </div>
+      <div class="form-group">
+        <label for="healthDetails"> vital health details</label>
+        <textarea id="healthDetails" name="healthDetails" class="form-control" [(ngModel)]="user.healthDetails"></textarea>
+      </div>
+    </div>
   
     <div *ngIf="user.role === 'doctor'">
       <div class="form-group"> <label for="hospitalSelect">Select Hospital:</label>
@@ -85,11 +99,6 @@
         <select id="specialization" name="specialization" class="form-control" [(ngModel)]="user.specialization">
           <option *ngFor="let specialization of service.specializations" [value]="specialization._id">{{ specialization.name }}</option>
         </select>
-      </div>
-
-      <div class="form-group">
-        <label for="consultationFee">Consultation Fee($)</label>
-        <input type="text" id="consultationFee" name="consultationFee" class="form-control" [(ngModel)]="user.consultationFee">
       </div>
   
       <div class="form-group">

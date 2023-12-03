@@ -271,7 +271,7 @@ app.post('/api/update/schedule', (req, res) =>{
   const filter = { _id: new ObjectId(id) };
   update = {
     $set: {
-      date: req.body.date,
+      dayOfWeek: req.body.dayOfWeek,
       startTime:  req.body.startTime,
       endTime:  req.body.endTime,
       isAvailable: true
@@ -308,9 +308,9 @@ app.get('/api/get/doctorsBySpecialization', async (req, res) => {
 
 
 app.get('/api/get/schedulesByDate', async (req, res) => {
-  const date = req.query.date;
+  const day = req.query.day;
   const id = req.query.doctorId;
-  Schedules.find({date: date , doctorId: id})
+  Schedules.find({dayOfWeek: day , doctorId: id})
     .then((data) => {
       res.json(data);
     })
@@ -366,7 +366,21 @@ app.post('/api/update/appointmentStatus', (req, res) =>{
   const filter = { _id: new ObjectId(id) };
   update = {
     $set: {
-     "status" : req.body.status
+     "status" : req.body.status,
+     "amountInDollars": req.body.amountInDollars ? req.body.amountInDollars : null
+    }
+  }
+  collection.updateOne(filter, update).then((data) => {
+    res.json(data);
+  })
+})
+app.post('/api/update/appointmentPaymentStatus', (req, res) =>{
+  const collection = client.db('BookMyDoc').collection('Appointments');
+  const id = req.query.id;
+  const filter = { _id: new ObjectId(id) };
+  update = {
+    $set: {
+     "isPaymentMade": true
     }
   }
   collection.updateOne(filter, update).then((data) => {
