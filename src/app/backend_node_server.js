@@ -96,7 +96,6 @@ app.get('/api/get/specializations', async (req, res) => {
 
 app.post('/api/add/specialization', (req, res) => {
   const collection = client.db('BookMyDoc').collection('Specializations');
-  console.log(req.body.details);
   collection.insertOne(req.body.details)
     .then((data) => {
       res.json(data);
@@ -147,7 +146,6 @@ app.get('/api/get/hospitals', async (req, res) => {
 
 app.post('/api/add/hospital', (req, res) => {
   const collection = client.db('BookMyDoc').collection('Hospitals');
-  console.log(req.body.details);
   collection.insertOne(req.body.details)
     .then((data) => {
       res.json(data);
@@ -348,7 +346,6 @@ app.post('/api/add/payment', (req, res) =>{
 app.get('/api/get/appointments', async (req, res) => {
   const id = req.query.id;
   var filter = id == "null" ?  {} : (req.query.isDoctor == "true" ? {doctorId: id} : {patientId:id});
-  console.log(filter);
 
   Appointments.find(filter)
     .then((data) => {

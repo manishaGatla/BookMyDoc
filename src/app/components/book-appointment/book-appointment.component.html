@@ -56,6 +56,10 @@
       <option *ngFor="let slot of slots" [value]="slot">{{ slot }}</option>
     </select>
     </div>
+    <div *ngIf="!isSlotAvaliable" class="margins error">
+      <span >Slot is not avaliable for booking consultation/Another appointment was made for particular slot.Please select another slot.</span>
+  
+    </div>
 
     <div  *ngIf="(slots && slots.length > 0)" class="margins">
       <button type="submit" (click)="submitAppointment(selectedDoctor)">Confirm Appointment</button>
@@ -66,10 +70,7 @@
     </div>
   </div>
 
-  <div *ngIf="!isSlotAvaliable" class="margins error">
-    <span >Slot is not avaliable for booking consultation/Another appointment was made for particular slot.Please select another slot.</span>
 
-  </div>
 
 
 </div>

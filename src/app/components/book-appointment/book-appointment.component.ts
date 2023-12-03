@@ -97,7 +97,8 @@ validateCardNumber(event: Event) {
       doctorEmail:doctorData.email,
       patientEmail: this.service.user.email,
       status: "Consultation Requested",
-      isPaymentMade: false
+      isPaymentMade: false,
+      patientVitalInfo: this.service.user.healthVitals
     }
     this.service.addAppointment(body).subscribe((res)=>{
       if(res && res.insertedId){
