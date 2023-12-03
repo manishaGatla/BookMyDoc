@@ -23,7 +23,6 @@
           <th>Specialization</th>
           <th>Hospital</th>
           <th>Hospital Address</th>
-          <th>Consultation Fee</th>
           <th>Select</th>
         </tr>
       </thead>
@@ -35,7 +34,6 @@
           <td>{{ doctor.specialization }}</td>
           <td>{{ doctor.hospital }}</td>
           <td>{{ getHospitalAddress(doctor) }}</td>
-          <td>{{ doctor.consultationFee }}</td>
 
           <td>
             <input type="radio" name="doctorRadio" [value]="doctor._id" [(ngModel)]="selectedDoctor">
@@ -48,7 +46,7 @@
   <div *ngIf="selectedDoctor" class="margins">
     <label for="appointmentDate">Select Appointment Date:</label>
     <input type="date" id="appointmentDate" name="appointmentDate" [(ngModel)]="selectedDate"
-      (change)="onSelectedDateChange()">
+      (change)="onSelectedDateChange($event)">
 
   </div>
   <div *ngIf="selectedDate" class="margins">
@@ -58,61 +56,21 @@
       <option *ngFor="let slot of slots" [value]="slot">{{ slot }}</option>
     </select>
     </div>
+    <div *ngIf="!isSlotAvaliable" class="margins error">
+      <span >Slot is not avaliable for booking consultation/Another appointment was made for particular slot.Please select another slot.</span>
+  
+    </div>
+
+    <div  *ngIf="(slots && slots.length > 0)" class="margins">
+      <button type="submit" (click)="submitAppointment(selectedDoctor)">Confirm Appointment</button>
+    </div>
     <div *ngIf="!(slots && slots.length > 0)" class="margins error">
       <span >No avaliable slots for the doctor selected on the selected date</span>
 
     </div>
   </div>
 
-  <div *ngIf="!isSlotAvaliable" class="margins error">
-    <span >Slot is not avaliable for booking consultation/Another appointment was made for particular slot.Please select another slot.</span>
-
-  </div>
-
-  <div *ngIf="selectedTimeSlot && isSlotAvaliable">
-    <div>
-      <div class="form-group">
-        <label for="selectedPaymentMethod">Select Card Type:</label>
-      <select id="selectedPaymentMethod" name="selectedPaymentMethod" [(ngModel)]="paymentDetails.selectedPaymentMethod">
-        <option value="debit">Debit Card</option>
-            <option value="credit">Credit Card</option>
-      </select>
-      </div>
-      <div class="form-group">
-        <label for="cardNumber">Card Number:</label>
-        <input type="number" id="cardNumber" name="cardNumber" [(ngModel)]="paymentDetails.cardNumber">
-      </div>
-      <div  class="form-group mr-l-350">
-        <span  *ngIf="!cardNumberValidation()"  class="error-message t-r"> Entered Card Number is not valid</span> 
-      </div>
-
-      <div class="form-group">
-        <label for="cardNumber">CVV:</label>
-        <input type="number" id="cardNumber" name="cardNumber" (change)="validateCvv($event)" [(ngModel)]="paymentDetails.cvv">
-      </div>
-      <div class="form-group mr-l-350">
-        <span  *ngIf="!isCvvValid"  class="error-message t-r"> Entered CVV is not valid</span> 
-      </div>
-
-      <div class="form-group">
-        <label for="cardNumber">Name On Card:</label>
-        <input type="text" id="cardNumber" name="cardNumber" [(ngModel)]="paymentDetails.nameOnCard">
-      </div>
-
-
-      <div class="form-group">
-        <label for="expireDate" class=" margins">Expiry Date(MM/YY)</label>
-        <input type="text" id="expiryDate" class="mr-r-15  mr-l-15" (change)="validateExpiryDate($event)" name="expiryDate"
-          [(ngModel)]="paymentDetails.expireDate" required>
-        
-      </div>
-      <div class="form-group mr-l-350">
-        <span  *ngIf="!isMonthValid || !isFutureDate"  class="error-message t-r"> Invalid Expiry Date</span>
-      </div>
 
 
 
-      <button type="submit" (click)="submitAppointment(selectedDoctor)">Confirm Appointment</button>
-    </div>
-  </div>
 </div>

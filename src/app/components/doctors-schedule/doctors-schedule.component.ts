@@ -15,7 +15,7 @@ export class DoctorsScheduleComponent  implements OnInit{
   constructor(public service: BackendConnectionServiceService){}
   ngOnInit(): void {
     this.newSchedule = {
-      date: '',
+      dayOfWeek: '',
       startTime: '',
       endTime: '',
       isAvailable: true,
@@ -35,7 +35,7 @@ export class DoctorsScheduleComponent  implements OnInit{
 
   cancelAddSchedule(){
     this.newSchedule= {
-      date: '',
+      dayOfWeek: '',
       startTime: '',
       endTime: '',
       isAvailable: true,
@@ -54,13 +54,21 @@ export class DoctorsScheduleComponent  implements OnInit{
     this.service.getSchedules(this.service.user.email).subscribe((res)=>{
       this.service.schedules = res;
       this.service.schedules.forEach((schedule: any)=>{
-        schedule.updatedDate = schedule.date;
+        schedule.updatedDayOfWeek = schedule.dayOfWeek;
         schedule.updatedStartTime= schedule.startTime;
         schedule.updatedEndTime = schedule.endTime;
         schedule.isAvailable= true;
         schedule.editMode = false;
       })
     })
+  }
+
+  dayOfWeekSelected(event: any){
+    this.newSchedule.dayOfWeek = event.target.value;
+  }
+
+  dayOfWeekSelectedForUpdation(event: any){
+    this.newSchedule.updatedDayOfWeek = event.target.value;
   }
 
   addSchedule(){
@@ -74,7 +82,7 @@ export class DoctorsScheduleComponent  implements OnInit{
   updateSchedule(schedule: any){
     var body ={
       _id: schedule._id,
-      date: schedule.updatedDate,
+      dayOfWeek: schedule.updatedDayOfWeek,
       startTime:  schedule.updatedStartTime,
       endTime:  schedule.updatedEndTime,
       isAvailable: true
@@ -97,7 +105,7 @@ export class DoctorsScheduleComponent  implements OnInit{
 
   cancelEdit(schedule: any){
     schedule.editMode = !schedule.editMode;
-    schedule.updatedDate = schedule.date;
+    schedule.updatedDayOfWeek = schedule.dayOfWeek;
     schedule.updatedStartTime= schedule.startTime;
     schedule.updatedEndTime = schedule.endTime;
   }

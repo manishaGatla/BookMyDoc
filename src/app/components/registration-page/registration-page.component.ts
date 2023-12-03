@@ -17,7 +17,7 @@ export class RegistrationPageComponent implements OnInit {
     email : null,
     password: null,
     phoneNumber: null,
-    age: null,
+    dob: null,
     gender: null,
     role: null,
     specialization: null,
@@ -26,8 +26,10 @@ export class RegistrationPageComponent implements OnInit {
     accountNumber : null,
     routingNumber: null,
     accountHolderName: null,
-    selectedHospital: null
-    
+    selectedHospital: null,
+    heightFeets: null,
+    heightInches: null,
+    healthDetails: null
 
   };
   isPasswordVisible: boolean = false;
@@ -79,7 +81,7 @@ isValidEmail(email: string): boolean {
         email : this.user.email,
         password: this.user.password,
         phoneNumber: this.user.phoneNumber.toString(),
-        age: this.user.age,
+        dob: this.user.dob,
         gender: this.user.gender,
         address: this.user.address,
         specialization: this.service.specializations.find((hospital: any)=> hospital._id == this.user.specialization ).name,
@@ -90,7 +92,6 @@ isValidEmail(email: string): boolean {
         hospital: this.service.hospitals.find((hospital: any)=> hospital._id == this.user.selectedHospital ).name,
         hospitalId: this.user.selectedHospital,
         isApproved:0,
-        consultationFee: this.user.consultationFee
       }
     }
     else{
@@ -99,10 +100,12 @@ isValidEmail(email: string): boolean {
         email : this.user.email,
         password: this.user.password,
         phoneNumber: this.user.phoneNumber.toString(),
-        age: this.user.age,
+        dob: this.user.dob,
         gender: this.user.gender,
         address: this.user.address,
-       
+        weight: this.user.weight + " Pounds",
+        height : this.user.heightFeets +" Feets " + this.user.heightInches + " Inches",
+        healthVitals: this.user.healthDetails 
       };
     }
   }

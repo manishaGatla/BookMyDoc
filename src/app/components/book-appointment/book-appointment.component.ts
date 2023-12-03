@@ -96,19 +96,15 @@ validateCardNumber(event: Event) {
       timeSlot: this.selectedTimeSlot,
       doctorEmail:doctorData.email,
       patientEmail: this.service.user.email,
-      status: "Consultation Requested"
+      status: "Consultation Requested",
+      isPaymentMade: false,
+      patientVitalInfo: this.service.user.healthVitals
     }
     this.service.addAppointment(body).subscribe((res)=>{
       if(res && res.insertedId){
-        var appointmentId = res.insertedId;
-        this.paymentDetails.cvv= this.paymentDetails.cvv.toString();
-        this.paymentDetails.cardNumber = this.paymentDetails.cardNumber.toString();
-        this.paymentDetails["appointmentId"]= appointmentId;
-        this.paymentDetails["amount"] = doctor.consultationFee;
-        this.service.addPayment(this.paymentDetails).subscribe((res)=>{
-          this.reset();
-          this.router.navigateByUrl('/appointments');
-        })
+        this.reset();
+        this.router.navigateByUrl('/appointments');
+       
       }
     })
   }
@@ -144,6 +140,12 @@ validateCardNumber(event: Event) {
     return this.service.hospitals.find((hos: any)=> hos._id ==  doctor.hospitalId).address;
   }
 
+  getDayOfWeek(selectedDate:any) {
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const dayIndex = selectedDate.getDay(); // Get the day index (0 for Sunday, 1 for Monday, etc.)
+    const dayName = daysOfWeek[dayIndex + 1]; // Get the day name using the index
+    return dayName; // Return the day name or day index as needed
+  }
  
 
   onSpecializationChange(){
@@ -154,7 +156,9 @@ validateCardNumber(event: Event) {
     })
   }
 
-  onSelectedDateChange(){
+  onSelectedDateChange(event : any){
+    const dateString = event.target.value;
+    const updatedSelectedDate = dateString ? new Date(dateString) : null;
     this.appointmentsOfDoc =[];
     this.schedules = [];
     this.slots =[];
@@ -167,8 +171,9 @@ validateCardNumber(event: Event) {
       appointmentId: null,
       amount: null
     };
+    var day = this.getDayOfWeek(updatedSelectedDate);
     this.selectedTimeSlot = null;
-    this.service.getschedulesByDate(this.selectedDate, this.selectedDoctor).subscribe((res)=>{
+    this.service.getschedulesByDate(day, this.selectedDoctor).subscribe((res)=>{
       this.service.getAppointmentDetails(this.service.user._id,this.selectedDoctor).subscribe((app: any)=>{
         this.appointmentsOfDoc = app;
         this.schedules = res;
@@ -198,8 +203,8 @@ validateCardNumber(event: Event) {
 
   generateSlots(): void {
     this.schedules.forEach((schedule: any)=>{
-      const startTime = new Date(`${schedule.date} ${schedule.startTime}`);
-      const endTime = new Date(`${schedule.date} ${schedule.endTime}`);
+      const startTime = new Date(`${this.selectedDate} ${schedule.startTime}`);
+      const endTime = new Date(`${this.selectedDate} ${schedule.endTime}`);
 
       let currentTime = startTime;
   
