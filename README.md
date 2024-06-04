@@ -1,5 +1,6 @@
 # BookMyDoc
 
+The "BookMyDoctor" app is designed to be a patient-focused platform that streamlines the connection between patients and healthcare providers, making the process of scheduling medical appointments simpler and more efficient. With a variety of features aimed at improving the patient experience, it utilizes MongoDB to address the varied requirements of users, offering customized functionalities for different participants in the healthcare appointment system.
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.7.
 
 ## Development server
